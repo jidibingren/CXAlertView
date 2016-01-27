@@ -66,7 +66,7 @@
     [self.alertView invalidateLayout];
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
+- (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAll;
 }

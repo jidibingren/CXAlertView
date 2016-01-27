@@ -15,9 +15,9 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "CXAlertView"
-  s.version      = "1.1.0"
-  s.summary      = "Custom alert-view which allow you to add view as main content."
+  s.name         = "CXAlertView-Enhanced"
+  s.version      = "1.0.0"
+  s.summary      = "Custom alert-view which allow you to add view as main content, add buttons arrangement for vertical"
 
   s.description  = <<-DESC
                    A longer description of CXAlertView in Markdown format.
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
                    * Finally, don't worry about the indent, CocoaPods strips it!
                    DESC
 
-  s.homepage     = "https://github.com/ChrisXu1221/CXAlertView"
+  s.homepage     = "https://github.com/jidibingren/CXAlertView"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
   #  profile URL.
   #
 
-  s.author             = { "Chris Xu" => "taterctl@gmail.com" }
+  s.author             = { "jidibingren" => "jidibingren@gmail.com" }
   # Or just: s.author    = "Chris Xu"
   # s.authors            = { "Chris Xu" => "taterctl@gmail.com" }
   # s.social_media_url   = "http://twitter.com/Chris Xu"
@@ -65,7 +65,7 @@ Pod::Spec.new do |s|
   #
 
   # s.platform     = :ios
-  s.platform     = :ios, "5.0"
+  s.platform     = :ios, "6.0"
 
   #  When using multiple platforms
   # s.ios.deployment_target = "5.0"
@@ -78,7 +78,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/ChrisXu1221/CXAlertView.git", :tag => "1.1.0" }
+  s.source       = { :git => "https://github.com/jidibingren/CXAlertView.git", :tag => "1.0.0" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #

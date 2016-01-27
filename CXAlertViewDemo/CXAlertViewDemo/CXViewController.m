@@ -34,6 +34,7 @@
 
 - (IBAction)infoButtonAction:(UIButton *)button;
 
+- (IBAction)showMultiButtonVAlert:(id)sender;
 @end
 
 @implementation CXViewController
@@ -238,5 +239,42 @@
     }
     
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+}
+
+- (IBAction)showMultiButtonVAlert:(id)sender {
+    
+    CXAlertView *alertViewMe = [[CXAlertView alloc] initWithTitle:defaultMessageTitle message:multiLinedMessageContent cancelButtonTitle:nil];
+    alertViewMe.buttonArrangement = CXButtonArrangementVertical;
+    alertViewMe.messageAlignment  = NSTextAlignmentLeft;
+
+    
+    // This is a demo for multiple line of title.
+    [alertViewMe addButtonWithTitle:multiLineMessageAcceptedText
+                               type:CXAlertViewButtonTypeDefault
+                            handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                                [alertView dismiss];
+                            }];
+    
+    [alertViewMe addButtonWithTitle:multiLineMessageCancelText
+                               type:CXAlertViewButtonTypeCancel
+                            handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                                [alertView dismiss];
+                            }];
+    
+    
+    [alertViewMe addButtonWithTitle:multiLineMessageCancelText
+                               type:CXAlertViewButtonTypeDefault
+                            handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                                [alertView dismiss];
+                            }];
+    
+    [alertViewMe addButtonWithTitle:multiLineMessageCancelText
+                               type:CXAlertViewButtonTypeCustom
+                            handler:^(CXAlertView *alertView, CXAlertButtonItem *button) {
+                                [alertView dismiss];
+                            }];
+
+    
+    [alertViewMe show];
 }
 @end

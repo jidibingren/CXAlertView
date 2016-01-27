@@ -11,6 +11,10 @@
 
 @class CXAlertView;
 typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
+typedef NS_ENUM(NSUInteger, CXButtonArrangement){
+    CXButtonArrangementHorizontal,
+    CXButtonArrangementVertical
+};
 @interface CXAlertView : UIView
 
 @property (nonatomic, copy) NSString *title;
@@ -47,6 +51,9 @@ typedef void(^CXAlertViewHandler)(CXAlertView *alertView);
 @property (nonatomic, assign) CGFloat bottomScrollViewHeight;
 @property (nonatomic, assign) BOOL showButtonLine;
 @property (nonatomic, assign) BOOL showBlurBackground;
+@property (nonatomic, assign) NSTextAlignment titleAlignment;
+@property (nonatomic, assign) NSTextAlignment messageAlignment;
+@property (nonatomic, assign) CXButtonArrangement buttonArrangement;
 // Create
 - (id)initWithTitle:(NSString *)title message:(NSString *)message cancelButtonTitle:(NSString *)cancelButtonTitle;
 - (id)initWithTitle:(NSString *)title contentView:(UIView *)contentView cancelButtonTitle:(NSString *)cancelButtonTitle;

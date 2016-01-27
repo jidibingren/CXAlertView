@@ -103,6 +103,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 @property (nonatomic, strong) CXAlertButtonContainerView *bottomScrollView;
 
 @property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *messageLabel;
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) CXBlurView *blurView;
 
@@ -173,6 +174,8 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         appearance.customButtonFont = [UIFont systemFontOfSize:18.];
         appearance.cornerRadius = 8;
         appearance.shadowRadius = 8;
+        appearance.titleAlignment   = NSTextAlignmentCenter;
+        appearance.messageAlignment = NSTextAlignmentCenter;
     });
 }
 
@@ -181,6 +184,20 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        //add by jidibingren
+        self.viewBackgroundColor = [UIColor whiteColor];
+        self.titleColor = [UIColor blackColor];
+        self.titleFont = [UIFont boldSystemFontOfSize:20];
+        self.buttonFont = [UIFont systemFontOfSize:[UIFont buttonFontSize]];
+        self.buttonColor = [UIColor colorWithRed:0.0f green:0.5f blue:1.0f alpha:1.0f];
+        self.cancelButtonColor = [UIColor colorWithRed:0.0f green:0.5f blue:1.0f alpha:1.0f];
+        self.cancelButtonFont = [UIFont boldSystemFontOfSize:18.];
+        self.customButtonColor = [UIColor colorWithRed:0.075f green:0.6f blue:0.9f alpha:1.0f];
+        self.customButtonFont = [UIFont systemFontOfSize:18.];
+        self.cornerRadius = 8;
+        self.shadowRadius = 8;
+        self.titleAlignment   = NSTextAlignmentCenter;
+        self.messageAlignment = NSTextAlignmentCenter;
     }
     return self;
 }
@@ -198,7 +215,8 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     _containerWidth = kDefaultContainerWidth;
 
     UILabel *messageLabel = [[UILabel alloc] init];
-    messageLabel.textAlignment = NSTextAlignmentCenter;
+    //edit by jidibingren
+    messageLabel.textAlignment = self.messageAlignment;
     messageLabel.backgroundColor = [UIColor clearColor];
     messageLabel.font = [UIFont systemFontOfSize:14.0];
     messageLabel.textColor = [UIColor blackColor];
@@ -207,6 +225,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     messageLabel.frame = CGRectMake( self.vericalPadding, 0, self.containerWidth - self.vericalPadding*2, [self heightWithText:message font:messageLabel.font]);
 
 	messageLabel.lineBreakMode=LBM;
+    _messageLabel = messageLabel;
 
     return  [self initWithTitle:title contentView:messageLabel cancelButtonTitle:cancelButtonTitle];
 }
@@ -494,7 +513,8 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 - (CGFloat)heightForBottomScrollView
 {
     if (self.buttons.count > 0) {
-        return _maxButtonHeight;
+        //edit by jidibingren
+        return self.buttonArrangement == CXButtonArrangementHorizontal ? _maxButtonHeight : _maxButtonHeight*_buttons.count;
     }
     return self.bottomScrollViewHeight;
 }
@@ -598,7 +618,8 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
             _titleLabel = [[UILabel alloc] init];
             [_topScrollView addSubview:_titleLabel];
         }
-        _titleLabel.textAlignment = NSTextAlignmentCenter;
+        //edit by jidibingren
+        _titleLabel.textAlignment = self.titleAlignment;
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.font = self.titleFont;
         _titleLabel.textColor = self.titleColor;
@@ -635,7 +656,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     for (UIView *view in _contentScrollView.subviews) {
         [view removeFromSuperview];
     }
-
+    _messageLabel.textAlignment = self.messageAlignment;
     if (_contentView) {
 
         if (CGRectGetWidth(_contentView.frame) < self.containerWidth) {
@@ -670,7 +691,12 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 
 - (void)updateBottomScrollView
 {
-    _bottomScrollView.defaultTopLineVisible = _showButtonLine;
+    //add by jidibingren
+    if (self.buttonArrangement == CXButtonArrangementHorizontal) {
+        _bottomScrollView.defaultTopLineVisible = _showButtonLine;
+    }else{
+        _bottomScrollView.defaultTopLineVisible = NO;
+    }
 	
     CGFloat y = 0;
 
@@ -826,18 +852,24 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 {
     self.buttonHeight = kDefaultButtonHeight;
     CGRect frame;
-    frame.size = CGSizeMake(self.containerWidth/2, self.buttonHeight);
-    
-    if (_buttons.count == 1) {
-        frame.origin = CGPointMake(0., 0.);
-        frame.size.width = self.containerWidth;
-    }
-    else if (_buttons.count == 2) {
-        frame.origin = CGPointMake(self.containerWidth/2, 0.);
-    }
-    else {
-        CXAlertButtonItem *lastButton = _buttons[_buttons.count - 2];
-        frame.origin = CGPointMake(CGRectGetMaxX(lastButton.frame), 0);
+    //edit by jidibingren
+    if (self.buttonArrangement == CXButtonArrangementHorizontal) {
+        frame.size = CGSizeMake(self.containerWidth/2, self.buttonHeight);
+        
+        if (_buttons.count == 1) {
+            frame.origin = CGPointMake(0., 0.);
+            frame.size.width = self.containerWidth;
+        }
+        else if (_buttons.count == 2) {
+            frame.origin = CGPointMake(self.containerWidth/2, 0.);
+        }
+        else {
+            CXAlertButtonItem *lastButton = _buttons[_buttons.count - 2];
+            frame.origin = CGPointMake(CGRectGetMaxX(lastButton.frame), 0);
+        }
+    }else{
+        frame.size = CGSizeMake(self.containerWidth, self.buttonHeight);
+        frame.origin = CGPointMake(0, self.buttonHeight*(_buttons.count-1));
     }
     
     UIFont *font = [self fontForButtonType:type];
@@ -876,41 +908,55 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     CGFloat contentWidthOffset = 0.;
     [_buttons addObject:button];
     
-    if ([_buttons count] == 1)
-	{
-		button.defaultRightLineVisible = NO;
-		button.frame = [self frameWithButtonTitile:title type:type];
-	}
-	else
-	{
-		// correct first button
-		CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
-		firstButton.defaultRightLineVisible = _showButtonLine;
-        CGFloat lastFirstButtonWidth = CGRectGetWidth(firstButton.frame);
-		CGRect newFrame = CGRectMake( 0, 0, self.containerWidth/2, CGRectGetHeight(firstButton.frame));
-		newFrame.origin.x = 0;
-        contentWidthOffset = lastFirstButtonWidth - CGRectGetWidth(newFrame);
-        
-		if (self.isVisible) {
-            CGRect buttonFrame = [self frameWithButtonTitile:title type:type];
-            button.alpha = 0.;
-            button.frame = CGRectMake( 0, 0, CGRectGetWidth(buttonFrame), CGRectGetHeight(buttonFrame));
-			[UIView animateWithDuration:0.3 animations:^{
-				firstButton.frame = newFrame;
-				button.alpha = 1.;
-				button.frame = buttonFrame;
-			}];
-		}
-		else {
-			firstButton.frame = newFrame;
-			button.alpha = 1.;
-			button.frame = [self frameWithButtonTitile:title type:type];
-		}
-	}
+    //edit by jidibingren
+    if (self.buttonArrangement == CXButtonArrangementHorizontal) {
+        if ([_buttons count] == 1)
+        {
+            button.defaultRightLineVisible = NO;
+            button.frame = [self frameWithButtonTitile:title type:type];
+        }
+        else
+        {
+            // correct first button
+            CXAlertButtonItem *firstButton = [_buttons objectAtIndex:0];
+            firstButton.defaultRightLineVisible = _showButtonLine;
+            CGFloat lastFirstButtonWidth = CGRectGetWidth(firstButton.frame);
+            CGRect newFrame = CGRectMake( 0, 0, self.containerWidth/2, CGRectGetHeight(firstButton.frame));
+            newFrame.origin.x = 0;
+            contentWidthOffset = lastFirstButtonWidth - CGRectGetWidth(newFrame);
+            
+            if (self.isVisible) {
+                CGRect buttonFrame = [self frameWithButtonTitile:title type:type];
+                button.alpha = 0.;
+                button.frame = CGRectMake( 0, 0, CGRectGetWidth(buttonFrame), CGRectGetHeight(buttonFrame));
+                [UIView animateWithDuration:0.3 animations:^{
+                    firstButton.frame = newFrame;
+                    button.alpha = 1.;
+                    button.frame = buttonFrame;
+                }];
+            }
+            else {
+                firstButton.frame = newFrame;
+                button.alpha = 1.;
+                button.frame = [self frameWithButtonTitile:title type:type];
+            }
+        }
+    }else {
+        //add by jidibingren
+        _bottomScrollView.defaultTopLineVisible = NO;
+        _bottomScrollView.showsVerticalScrollIndicator = NO;
+        button.defaultRightLineVisible = NO;
+        button.defaultTopLineVisible = YES;
+        button.frame = [self frameWithButtonTitile:title type:type];
+    }
 
 	[_bottomScrollView addSubview:button];
-    
-    _bottomScrollView.contentSize = CGSizeMake(CGRectGetMaxX(button.frame), _maxButtonHeight);
+    //edit by jidibingren
+    if (self.buttonArrangement == CXButtonArrangementHorizontal) {
+        _bottomScrollView.contentSize = CGSizeMake(CGRectGetMaxX(button.frame), _maxButtonHeight);
+    }else{
+        _bottomScrollView.contentSize = CGSizeMake(CGRectGetMaxX(button.frame), _maxButtonHeight*self.buttons.count);
+    }
 }
 
 - (CXAlertButtonItem *)buttonItemWithType:(CXAlertViewButtonType)type font:(UIFont *)font
