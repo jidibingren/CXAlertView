@@ -49,8 +49,10 @@ typedef NS_ENUM(NSUInteger, CXButtonArrangement){
 @property (nonatomic, assign) CGFloat contentScrollViewMaxHeight;
 @property (nonatomic, assign) CGFloat contentScrollViewMinHeight;
 @property (nonatomic, assign) CGFloat bottomScrollViewHeight;
+@property (nonatomic, assign) CGFloat alertViewAlpha;
 @property (nonatomic, assign) BOOL showButtonLine;
 @property (nonatomic, assign) BOOL showBlurBackground;
+@property (nonatomic, assign) BOOL showBackgroundView;
 @property (nonatomic, assign) NSTextAlignment titleAlignment;
 @property (nonatomic, assign) NSTextAlignment messageAlignment;
 @property (nonatomic, assign) CXButtonArrangement buttonArrangement;

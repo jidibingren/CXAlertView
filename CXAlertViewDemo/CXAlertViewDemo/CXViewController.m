@@ -246,7 +246,7 @@
     CXAlertView *alertViewMe = [[CXAlertView alloc] initWithTitle:defaultMessageTitle message:multiLinedMessageContent cancelButtonTitle:nil];
     alertViewMe.buttonArrangement = CXButtonArrangementVertical;
     alertViewMe.messageAlignment  = NSTextAlignmentLeft;
-
+    alertViewMe.showBlurBackground = NO;
     
     // This is a demo for multiple line of title.
     [alertViewMe addButtonWithTitle:multiLineMessageAcceptedText

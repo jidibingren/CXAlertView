@@ -176,6 +176,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         appearance.shadowRadius = 8;
         appearance.titleAlignment   = NSTextAlignmentCenter;
         appearance.messageAlignment = NSTextAlignmentCenter;
+        appearance.alertViewAlpha   = 0.95;
     });
 }
 
@@ -198,6 +199,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
         self.shadowRadius = 8;
         self.titleAlignment   = NSTextAlignmentCenter;
         self.messageAlignment = NSTextAlignmentCenter;
+        self.alertViewAlpha   = 0.95;
     }
     return self;
 }
@@ -324,7 +326,9 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
     [CXAlertView setCurrentAlertView:self];
 
     // transition background
-    [CXAlertView showBackground];
+    if (_showBackgroundView) {
+        [CXAlertView showBackground];
+    }
 
     CXAlertViewController *viewController = [[CXAlertViewController alloc] initWithNibName:nil bundle:nil];
     viewController.alertView = self;
@@ -797,10 +801,16 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 
     [UIView animateWithDuration:0.3
                      animations:^{
-                         _containerView.alpha = 1.;
+                         if (_showBlurBackground) {
+                             _containerView.alpha = 1.;
+                             _containerView.backgroundColor = [UIColor clearColor];
+                         }else{
+                             _containerView.alpha = _alertViewAlpha;
+                             _containerView.backgroundColor = _viewBackgroundColor;
+                         }
                          _containerView.transform = CGAffineTransformMakeScale(1.0,1.0);
 
-                         _blurView.alpha = 1.;
+                         _blurView.alpha = _alertViewAlpha;
                          _blurView.transform = CGAffineTransformMakeScale(1.0,1.0);
                      }
                      completion:^(BOOL finished) {
@@ -1033,7 +1043,7 @@ static BOOL __cx_statsu_prefersStatusBarHidden;
 {
     UIColor *containerBKGColor = _viewBackgroundColor ? _viewBackgroundColor : [UIColor whiteColor];
     self.blurView.backgroundView.backgroundColor = containerBKGColor;
-    self.containerView.backgroundColor = [containerBKGColor colorWithAlphaComponent:_showBlurBackground ? 0. : 1.];;
+    self.containerView.backgroundColor = [containerBKGColor colorWithAlphaComponent:_showBlurBackground ? 0. : 1.];
 
     if (_showBlurBackground) {
         if (self.blurView == nil) {

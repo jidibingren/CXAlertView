@@ -1,13 +1,14 @@
 CXAlertView
 ===========
 
-Version 1.0.0.0
+Version 1.0.0.1
 
+* Can edit `CXAlertView` alpha by alertViewAlpha property
 * Replace `LiveFrost` by native blur function
 * Simulate appearance in iOS7.1
 * Bug fix
 
-Version 1.0.0.0
+Version 1.0.0.1
 
 >You cannot customize the appearance of alert views.' - [iOS 7 Design Resources ](https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/UIKitUICatalog/UIAlertView.html#//apple_ref/doc/uid/TP40012857-UIAlertView-SW1)
 

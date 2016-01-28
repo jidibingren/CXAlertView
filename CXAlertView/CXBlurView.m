@@ -53,7 +53,7 @@
 - (void)blur
 {
     [UIView animateWithDuration:0.3 animations:^{
-        _backgroundView.alpha = 0.7;
+        _backgroundView.alpha = 1.;
     }];
 }
 
